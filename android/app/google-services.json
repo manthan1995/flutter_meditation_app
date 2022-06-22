@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "460125317206",
+    "project_id": "meditationapp-ec1ad",
+    "storage_bucket": "meditationapp-ec1ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460125317206:android:f9df49282a52f6f1b8b3f7",
+        "android_client_info": {
+          "package_name": "com.scape.meditations"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460125317206-slnqukpb31ccnn16rdvpfu4lnau4u12f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scape.meditations",
+            "certificate_hash": "3f647954f9721f610aa7381cd64a42e34bd5c12c"
+          }
+        },
+        {
+          "client_id": "460125317206-c8ubqgg13mmj9pipm8u3saknthmbtjfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb2OPea89NTQ7Qc4DOrflqRdplwt-WCcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460125317206-c8ubqgg13mmj9pipm8u3saknthmbtjfd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "460125317206-1u6i0klb2blmrp6d8c6g0jv38d55v88o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.meditationapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
