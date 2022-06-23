@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'package:meditation_app/constant/image.dart';
+import 'package:meditation_app/view/timer_screen/test_screen.dart';
 import 'package:meditation_app/view/timer_screen/timer_running_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -182,9 +183,11 @@ class _ChooseTimerScreeenState extends State<ChooseTimerScreeen> {
           PageTransition(
               duration: const Duration(milliseconds: 300),
               type: PageTransitionType.fade,
-              child: MyHomePage(
-                timerValue: finalvalue!,
-              )),
+              child: const TestScreen()
+              // MyHomePage(
+              //   timerValue: finalvalue!,
+              // ),
+              ),
         );
       },
       child: Image.asset(

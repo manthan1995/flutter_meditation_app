@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../constant/colors.dart';
@@ -31,41 +30,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   // final service = FlutterBackgroundService();
 
-  Future<void> _initForegroundTask() async {
-    await FlutterForegroundTask.init(
-      androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'notification_channel_id',
-        channelName: 'Foreground Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
-        channelImportance: NotificationChannelImportance.LOW,
-        priority: NotificationPriority.LOW,
-        iconData: const NotificationIconData(
-          resType: ResourceType.mipmap,
-          resPrefix: ResourcePrefix.ic,
-          name: 'launcher',
-        ),
-        buttons: [
-          const NotificationButton(id: 'sendButton', text: 'Send'),
-          const NotificationButton(id: 'testButton', text: 'Test'),
-        ],
-      ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions: const ForegroundTaskOptions(
-        interval: 5000,
-        autoRunOnBoot: true,
-        allowWifiLock: true,
-      ),
-      printDevLog: true,
-    );
-  }
+  // Future<void> _initForegroundTask() async {
+  //   await FlutterForegroundTask.init(
+  //     androidNotificationOptions: AndroidNotificationOptions(
+  //       channelId: 'notification_channel_id',
+  //       channelName: 'Foreground Notification',
+  //       channelDescription:
+  //           'This notification appears when the foreground service is running.',
+  //       channelImportance: NotificationChannelImportance.LOW,
+  //       priority: NotificationPriority.LOW,
+  //       iconData: const NotificationIconData(
+  //         resType: ResourceType.mipmap,
+  //         resPrefix: ResourcePrefix.ic,
+  //         name: 'launcher',
+  //       ),
+  //       buttons: [
+  //         const NotificationButton(id: 'sendButton', text: 'Send'),
+  //         const NotificationButton(id: 'testButton', text: 'Test'),
+  //       ],
+  //     ),
+  //     iosNotificationOptions: const IOSNotificationOptions(
+  //       showNotification: true,
+  //       playSound: false,
+  //     ),
+  //     foregroundTaskOptions: const ForegroundTaskOptions(
+  //       interval: 5000,
+  //       autoRunOnBoot: true,
+  //       allowWifiLock: true,
+  //     ),
+  //     printDevLog: true,
+  //   );
+  // }
 
   @override
   void dispose() {
-    timer.cancel();
+    // timer.cancel();
     controller.dispose();
     super.dispose();
   }
@@ -73,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _initForegroundTask();
+    // _initForegroundTask();
     var data = preferences.getString(Keys.userReponse);
 
     prefData = jsonDecode(data!);
@@ -85,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(seconds: widget.timerValue),
     );
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) async {
+    controller.forward().whenComplete(() async {
       await audioCache.play("timer_song.mp3");
       Navigator.push(
         context,
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ),
         ),
       ).then((value) {
-        t.cancel();
+        // t.cancel();
         timer.cancel();
       });
     });
