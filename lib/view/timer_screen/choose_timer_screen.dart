@@ -1,13 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'package:meditation_app/constant/image.dart';
-import 'package:meditation_app/view/timer_screen/test_screen.dart';
 import 'package:meditation_app/view/timer_screen/timer_running_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../constant/colors.dart';
+import '../../constant/preferences_key.dart';
 import '../../constant/strings.dart';
 
 class ChooseTimerScreeen extends StatefulWidget {
@@ -21,15 +23,71 @@ class _ChooseTimerScreeenState extends State<ChooseTimerScreeen> {
   int? isSelected;
   String? data;
   int? finalvalue;
+  String? finalMusic;
   ScrollController scrollController = ScrollController();
   ScrollController? controller;
   IsInViewPortCondition? inViewPortCondition;
+  late Map<String, dynamic> prefData;
+  List<Map<String, dynamic>>? numberList;
+  //List<int> numberList = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
 
-  List<int> numberList = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
   @override
   void initState() {
     super.initState();
     scrollController.addListener(() {});
+    var data = preferences.getString(Keys.userReponse);
+
+    prefData = jsonDecode(data!);
+    numberList = [
+      {
+        'minit': '5',
+        'music': prefData['MUSIC_URL']['FIVE'],
+      },
+      {
+        'minit': '10',
+        'music': prefData['MUSIC_URL']['TEN'],
+      },
+      {
+        'minit': '15',
+        'music': prefData['MUSIC_URL']['FIFTEEN'],
+      },
+      {
+        'minit': '20',
+        'music': prefData['MUSIC_URL']['TWENTY'],
+      },
+      {
+        'minit': '25',
+        'music': '',
+      },
+      {
+        'minit': '30',
+        'music': '',
+      },
+      {
+        'minit': '35',
+        'music': '',
+      },
+      {
+        'minit': '40',
+        'music': '',
+      },
+      {
+        'minit': '45',
+        'music': '',
+      },
+      {
+        'minit': '50',
+        'music': '',
+      },
+      {
+        'minit': '55',
+        'music': '',
+      },
+      {
+        'minit': '60',
+        'music': '',
+      },
+    ];
   }
 
   @override
@@ -99,7 +157,7 @@ class _ChooseTimerScreeenState extends State<ChooseTimerScreeen> {
                       controller: controller,
                       initialInViewIds: const ['0'],
                       isInViewPortCondition: condition,
-                      itemCount: numberList.length,
+                      itemCount: numberList!.length,
                       builder: (BuildContext context, int index) {
                         return Container(
                           alignment: Alignment.center,
@@ -108,16 +166,19 @@ class _ChooseTimerScreeenState extends State<ChooseTimerScreeen> {
                             id: index.toString(),
                             builder: (BuildContext context, bool isInView,
                                 Widget? child) {
-                              isSelected = isInView ? numberList[index] : 0;
+                              isSelected = isInView
+                                  ? int.parse(numberList![index]['minit'])
+                                  : 0;
                               data = isSelected.toString();
 
-                              if (data!
-                                  .contains(numberList[index].toString())) {
+                              if (data!.contains(
+                                  numberList![index]['minit'].toString())) {
                                 HapticFeedback.mediumImpact();
                                 finalvalue = int.parse(data!);
+                                finalMusic = numberList![index]['music'];
                               }
                               return Text(
-                                '${numberList[index].toString()}min',
+                                '${numberList![index]['minit'].toString()}min',
                                 key: ValueKey("item-$index"),
                                 style: TextStyle(
                                   fontFamily: 'FuturaBookFont',
@@ -181,13 +242,10 @@ class _ChooseTimerScreeenState extends State<ChooseTimerScreeen> {
         Navigator.push(
           context,
           PageTransition(
-              duration: const Duration(milliseconds: 300),
-              type: PageTransitionType.fade,
-              child: const TestScreen()
-              // MyHomePage(
-              //   timerValue: finalvalue!,
-              // ),
-              ),
+            duration: const Duration(milliseconds: 300),
+            type: PageTransitionType.fade,
+            child: MyHomePage(timerValue: finalvalue!, music: finalMusic),
+          ),
         );
       },
       child: Image.asset(

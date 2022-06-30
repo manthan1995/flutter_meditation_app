@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:meditation_app/constant/colors.dart';
 import 'package:meditation_app/constant/strings.dart';
 import 'package:meditation_app/widgtes/navigation.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../constant/image.dart';
 import '../../constant/preferences_key.dart';
 import '../../widgtes/cicualer_indicator.dart';
-import '../purchase_screens/Subscription_button.dart';
+import '../profile_screen/profile_purchase_screen.dart';
 import 'music_play_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             prefData['meditationData']['SUBTITLE'],
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.09,
+              fontSize: MediaQuery.of(context).size.width * 0.085,
               fontWeight: FontWeight.bold,
               color: Colours.whiteColor,
               fontFamily: 'Recoleta-SemiBold',
@@ -170,62 +171,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       prefData['meditationData']['MUSIC'],
                 ),
               )
-            : buildSubscribeDialog();
+            : Navigator.push(
+                context,
+                PageTransition(
+                  duration: const Duration(milliseconds: 300),
+                  type: PageTransitionType.fade,
+                  child: const ProfilePurchaseScreen(),
+                ),
+              );
       },
       child: Image.asset(
         ConstImages.playImage,
         height: MediaQuery.of(context).size.height * 0.085,
       ),
-    );
-  }
-
-  Future<void> buildSubscribeDialog() {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: const Text(
-            Strings.alertStr,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          content: const Text(Strings.alertMeditationMessge),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width / 3,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      bottomLeft: Radius.circular(15),
-                    ),
-                  ),
-                  color: Colours.whiteColor,
-                  child: const Text(
-                    Strings.cancleStr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colours.blackColor,
-                    ),
-                  ),
-                ),
-                SubscriptionButton(screenType: 'SubScribe'),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 }

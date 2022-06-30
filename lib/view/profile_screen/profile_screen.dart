@@ -149,15 +149,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SizedBox(
           height: MediaQuery.of(context).size.height / 2.9,
           width: MediaQuery.of(context).size.width,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.06,
+          child: Theme(
+            data: ThemeData(
+              splashColor: Colors.black,
+              splashFactory: NoSplash.splashFactory,
             ),
-            child: Image.network(
-              prefData['meditationData']['URLS'] +
-                  prefData['nextMeditation']['IMAGE'],
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.06,
+              ),
+              child: FadeInImage.assetNetwork(
+                fadeInDuration: const Duration(milliseconds: 600),
+                fadeOutDuration: const Duration(milliseconds: 5),
+                fit: BoxFit.fill,
+                image: prefData['meditationData']['URLS'] +
+                    prefData['nextMeditation']['IMAGE'],
+                placeholder: 'assets/image/image1.png',
+              ),
             ),
           ),
         ),

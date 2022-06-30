@@ -10,11 +10,13 @@ import '../../constant/colors.dart';
 import '../../constant/image.dart';
 import '../../constant/preferences_key.dart';
 import '../../constant/strings.dart';
+import '../../provider/auth_provider/login_provider.dart';
 import '../streak_screen/streak_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   int timerValue;
-  MyHomePage({required this.timerValue});
+  String? music;
+  MyHomePage({required this.timerValue, this.music});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -25,9 +27,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool isRunning = false;
   late AudioPlayer audioPlayer;
   late AudioCache audioCache;
-
   late Timer timer;
-
   // final service = FlutterBackgroundService();
 
   // Future<void> _initForegroundTask() async {
@@ -82,10 +82,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     audioCache = AudioCache(fixedPlayer: audioPlayer);
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: widget.timerValue),
+      duration: Duration(seconds: widget.timerValue * 60),
     );
+    audioPlayer.play(widget.music!);
     controller.forward().whenComplete(() async {
-      await audioCache.play("timer_song.mp3");
+      //await audioCache.play("timer_song.mp3");
       Navigator.push(
         context,
         PageTransition(
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 //counter view
                 Countdown(
                     animation: StepTween(
-                  begin: widget.timerValue,
+                  begin: widget.timerValue * 60,
                   end: 0,
                 ).animate(controller)),
                 SizedBox(
@@ -146,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         await HapticFeedback.mediumImpact();
         if (!controller.isAnimating) {
           controller.forward().whenComplete(() async {
-            await audioCache.play("timer_song.mp3");
+            //await audioCache.play("timer_song.mp3");
             Navigator.push(
               context,
               PageTransition(
@@ -160,12 +161,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
             );
           });
+          await audioPlayer.resume();
           setState(() {
             isRunning = false;
           });
         } else {
           controller.stop();
-
+          await audioPlayer.pause();
           setState(() {
             isRunning = true;
           });
@@ -185,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       onTap: () async {
         await HapticFeedback.mediumImpact();
         controller.dispose();
-
+        audioPlayer.stop();
         Navigator.push(
           context,
           PageTransition(

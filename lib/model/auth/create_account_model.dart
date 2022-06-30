@@ -5,14 +5,15 @@ class CreateAccountModel {
   MeditationData? meditationData;
   NextMeditationData? nextMeditationData;
   int? trialDays;
+  MusicUrl? musicUrl;
 
-  CreateAccountModel({
-    this.status,
-    this.msg,
-    this.data,
-    this.meditationData,
-    this.nextMeditationData,
-  });
+  CreateAccountModel(
+      {this.status,
+      this.msg,
+      this.data,
+      this.meditationData,
+      this.nextMeditationData,
+      this.musicUrl});
 
   CreateAccountModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -25,6 +26,8 @@ class CreateAccountModel {
         ? NextMeditationData.fromJson(json['nextMeditation'])
         : null;
     trialDays = json['TRIAL_DAYS'];
+    musicUrl =
+        json['MUSIC_URL'] != null ? MusicUrl.fromJson(json['MUSIC_URL']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +43,9 @@ class CreateAccountModel {
     }
     if (nextMeditationData != null) {
       data['nextMeditation'] = nextMeditationData!.toJson();
+    }
+    if (musicUrl != null) {
+      data['MUSIC_URL'] = musicUrl!.toJson();
     }
     return data;
   }
@@ -234,6 +240,29 @@ class NextMeditationData {
     data['CREATE_DATE'] = cREATEDATE;
     data['UPDATE_DATE'] = uPDATEDATE;
     data['MEDITATION_TYPE'] = mEDITATIONTYPE;
+    return data;
+  }
+}
+
+class MusicUrl {
+  String? fIVE;
+  String? tEN;
+  String? fIFTEEN;
+  String? tWENTY;
+
+  MusicUrl.fromJson(Map<String, dynamic> json) {
+    fIVE = json['FIVE'];
+    tEN = json['TEN'];
+    fIFTEEN = json['FIFTEEN'];
+    tWENTY = json['TWENTY'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['FIVE'] = fIVE;
+    data['TEN'] = tEN;
+    data['FIFTEEN'] = fIFTEEN;
+    data['TWENTY'] = tWENTY;
     return data;
   }
 }
