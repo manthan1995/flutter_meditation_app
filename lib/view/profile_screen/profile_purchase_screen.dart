@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../bottom_bar.dart';
 import '../../constant/colors.dart';
@@ -134,7 +135,62 @@ class _ProfilePurchaseScreenState extends State<ProfilePurchaseScreen> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.025,
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildUrlLaunch(
+              buttonText: 'Terms',
+              onTap: () async {
+                await launchURL(
+                  urlString: 'https://joinscape.com/terms-of-service/',
+                );
+              },
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.05,
+            ),
+            buildUrlLaunch(
+              buttonText: 'Privacy',
+              onTap: () async {
+                await launchURL(
+                  urlString: 'https://joinscape.com/privacy-policy/',
+                );
+              },
+            ),
+          ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.015,
+        ),
       ],
+    );
+  }
+
+  launchURL({
+    required String urlString,
+  }) async {
+    if (await canLaunchUrl(Uri.parse(urlString))) {
+      // ignore: deprecated_member_use
+      await launch(urlString);
+    } else {
+      throw 'Could not launch $urlString';
+    }
+  }
+
+  Widget buildUrlLaunch({
+    required String buttonText,
+    required Function() onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        buttonText,
+        style: TextStyle(
+          fontSize: MediaQuery.of(context).size.height * 0.018,
+          color: Colours.whiteColor,
+          fontFamily: 'FuturaMediumBT',
+        ),
+      ),
     );
   }
 }

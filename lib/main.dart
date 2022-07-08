@@ -8,7 +8,6 @@ import 'package:meditation_app/view/timer_screen/foreground_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void startCallback() {
-  // The setTaskHandler function must be called to handle the task in the background.
   FlutterForegroundTask.setTaskHandler(MyTaskHandler());
 }
 
@@ -22,45 +21,3 @@ void main() async {
     runApp(const MyApp());
   });
 }
-
-//service code
-
-// Future<void> initializeService() async {
-//   await service.configure(
-//     androidConfiguration: AndroidConfiguration(
-//       onStart: onStart,
-//       autoStart: true,
-//       isForegroundMode: true,
-//     ),
-//     iosConfiguration: IosConfiguration(
-//       autoStart: true,
-//       onForeground: onStart,
-//       onBackground: onIosBackground,
-//     ),
-//   );
-//   await service.startService();
-// }
-
-// bool onIosBackground(ServiceInstance service) {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   return true;
-// }
-
-// void onStart(ServiceInstance service) async {
-//   DartPluginRegistrant.ensureInitialized();
-
-//   if (service is AndroidServiceInstance) {
-//     service.on('setAsForeground').listen((event) {
-//       service.setAsForegroundService();
-//     });
-
-//     service.on('setAsBackground').listen((event) {
-//       service.setAsBackgroundService();
-//     });
-//   }
-
-//   service.on('stopService').listen((event) {
-//     service.stopSelf();
-//   });
-// }

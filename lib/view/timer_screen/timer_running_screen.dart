@@ -10,7 +10,6 @@ import '../../constant/colors.dart';
 import '../../constant/image.dart';
 import '../../constant/preferences_key.dart';
 import '../../constant/strings.dart';
-import '../../provider/auth_provider/login_provider.dart';
 import '../streak_screen/streak_screen.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -28,43 +27,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late AudioPlayer audioPlayer;
   late AudioCache audioCache;
   late Timer timer;
-  // final service = FlutterBackgroundService();
-
-  // Future<void> _initForegroundTask() async {
-  //   await FlutterForegroundTask.init(
-  //     androidNotificationOptions: AndroidNotificationOptions(
-  //       channelId: 'notification_channel_id',
-  //       channelName: 'Foreground Notification',
-  //       channelDescription:
-  //           'This notification appears when the foreground service is running.',
-  //       channelImportance: NotificationChannelImportance.LOW,
-  //       priority: NotificationPriority.LOW,
-  //       iconData: const NotificationIconData(
-  //         resType: ResourceType.mipmap,
-  //         resPrefix: ResourcePrefix.ic,
-  //         name: 'launcher',
-  //       ),
-  //       buttons: [
-  //         const NotificationButton(id: 'sendButton', text: 'Send'),
-  //         const NotificationButton(id: 'testButton', text: 'Test'),
-  //       ],
-  //     ),
-  //     iosNotificationOptions: const IOSNotificationOptions(
-  //       showNotification: true,
-  //       playSound: false,
-  //     ),
-  //     foregroundTaskOptions: const ForegroundTaskOptions(
-  //       interval: 5000,
-  //       autoRunOnBoot: true,
-  //       allowWifiLock: true,
-  //     ),
-  //     printDevLog: true,
-  //   );
-  // }
 
   @override
   void dispose() {
-    // timer.cancel();
     controller.dispose();
     super.dispose();
   }
@@ -72,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // _initForegroundTask();
+
     var data = preferences.getString(Keys.userReponse);
 
     prefData = jsonDecode(data!);
@@ -86,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
     audioPlayer.play(widget.music!);
     controller.forward().whenComplete(() async {
-      //await audioCache.play("timer_song.mp3");
       Navigator.push(
         context,
         PageTransition(
@@ -99,11 +63,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ),
         ),
       ).then((value) {
-        // t.cancel();
         timer.cancel();
       });
     });
-//after counter is completed
   }
 
   @override
@@ -117,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Column(
               children: [
-                //counter view
                 Countdown(
                     animation: StepTween(
                   begin: widget.timerValue * 60,
@@ -140,14 +101,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-//this code is play and pause timer
   Widget beginButton() {
     return GestureDetector(
       onTap: () async {
         await HapticFeedback.mediumImpact();
         if (!controller.isAnimating) {
           controller.forward().whenComplete(() async {
-            //await audioCache.play("timer_song.mp3");
             Navigator.push(
               context,
               PageTransition(
@@ -179,8 +138,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
     );
   }
-
-  //finish button code
 
   Widget backButton() {
     return GestureDetector(
@@ -215,7 +172,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 }
 
-//show counter text
 class Countdown extends AnimatedWidget {
   Countdown({required this.animation}) : super(listenable: animation);
   Animation<int> animation;
