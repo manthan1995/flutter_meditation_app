@@ -7,8 +7,8 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:meditation_app/api_provider/subscription_api/subscription_api.dart';
 import 'package:meditation_app/constant/colors.dart';
 import 'package:meditation_app/provider/auth_provider/login_provider.dart';
+import 'package:meditation_app/view/home/home_screen.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../bottom_bar.dart';
 import '../../constant/preferences_key.dart';
 import '../../constant/strings.dart';
 import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
@@ -355,7 +355,9 @@ class _SubscriptionButtonState extends State<SubscriptionButton> {
                 PageTransition(
                   duration: const Duration(milliseconds: 400),
                   type: PageTransitionType.fade,
-                  child: BottomBarscreen(selectBottmTab: 0),
+                  // with bottomNavigationBar(last change)
+                  //child: BottomBarscreen(selectBottmTab: 0),
+                  child: const HomeScreen(),
                 ),
               );
             }

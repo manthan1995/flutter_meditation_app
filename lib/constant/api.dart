@@ -5,4 +5,5 @@ class ApiUrls {
   static const String socialLoginUrl = '/application/user/login';
   static const String subscriptionUrl = '/application/user/subscription';
   static const String streckCountUrl = '/application/user/meditation';
+  static const String nextSongUrl = '/application/user/next';
 }

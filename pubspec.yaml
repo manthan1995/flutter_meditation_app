@@ -48,7 +48,6 @@ dependencies:
   page_transition: ^2.0.5
   in_app_purchase: ^3.0.4
   timer_count_down: ^2.2.1
-  flutter_foreground_task: ^3.7.3
   inview_notifier_list: ^3.0.0
   audio_service: ^0.18.4
   url_launcher: ^6.1.4

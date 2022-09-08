@@ -16,7 +16,7 @@ import 'package:meditation_app/widgtes/cicualer_indicator.dart';
 import 'package:meditation_app/widgtes/textfiled.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../../bottom_bar.dart';
+import '../home/home_screen.dart';
 import '../profile_screen/profile_purchase_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -166,11 +166,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 PageTransition(
                     duration: const Duration(milliseconds: 400),
                     type: PageTransitionType.fade,
+                    // with bottomNavigationBar(last change)
+                    //  child: prefData['data']['TYPE'] == 'COMPANY'
+                    //     ? BottomBarscreen(selectBottmTab: 0)
+                    //     : prefData['data']['ISSUBCRIBE'] == true
+                    //         ? BottomBarscreen(selectBottmTab: 0)
+                    //         : const ProfilePurchaseScreen()
                     child: prefData['data']['TYPE'] == 'COMPANY'
-                        ? BottomBarscreen(selectBottmTab: 0)
+                        ? const HomeScreen()
                         : prefData['data']['ISSUBCRIBE'] == true
-                            ? BottomBarscreen(selectBottmTab: 0)
+                            ? const HomeScreen()
                             : const ProfilePurchaseScreen()
+
                     // child: prefData['data']['TYPE'] == 'COMPANY'
                     //     ? const HomeScreen()
                     //     : prefData['data']['SUBCRIPTION_DAYS'] >=
@@ -283,8 +290,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 PageTransition(
                     duration: const Duration(milliseconds: 400),
                     type: PageTransitionType.fade,
+                    // with bottomNavigationBar(last change)
+
+                    // child: prefData['data']['ISSUBCRIBE'] == true
+                    //     ? BottomBarscreen(selectBottmTab: 0)
+                    //     : const ProfilePurchaseScreen()
                     child: prefData['data']['ISSUBCRIBE'] == true
-                        ? BottomBarscreen(selectBottmTab: 0)
+                        ? const HomeScreen()
                         : const ProfilePurchaseScreen()
                     // child: prefData['data']['TYPE'] == 'COMPANY'
                     //     ? const HomeScreen()
@@ -343,8 +355,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 PageTransition(
                     duration: const Duration(milliseconds: 400),
                     type: PageTransitionType.fade,
+                    // with bottomNavigationBar(last change)
+
+                    // child: prefData['data']['ISSUBCRIBE'] == true
+                    //     ? BottomBarscreen(selectBottmTab: 0)
+                    //     : const ProfilePurchaseScreen()
                     child: prefData['data']['ISSUBCRIBE'] == true
-                        ? BottomBarscreen(selectBottmTab: 0)
+                        ? const HomeScreen()
                         : const ProfilePurchaseScreen()
                     // child: prefData['data']['TYPE'] == 'COMPANY'
                     //     ? const HomeScreen()
@@ -403,9 +420,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 PageTransition(
                     duration: const Duration(milliseconds: 400),
                     type: PageTransitionType.fade,
+                    // with bottomNavigationBar(last change)
+
+                    // child: prefData['data']['ISSUBCRIBE'] == true
+                    //     ? BottomBarscreen(selectBottmTab: 0)
+                    //     : const ProfilePurchaseScreen()
                     child: prefData['data']['ISSUBCRIBE'] == true
-                        ? BottomBarscreen(selectBottmTab: 0)
+                        ? const HomeScreen()
                         : const ProfilePurchaseScreen()
+
                     // child: prefData['data']['TYPE'] == 'COMPANY'
                     //     ? const HomeScreen()
                     //     : prefData['data']['SUBCRIPTION_DAYS'] >=

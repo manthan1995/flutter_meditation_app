@@ -2,6 +2,7 @@ class ConstImages {
   static const String _assetsJpeg = 'assets/image/';
   static const String _assetsPng = 'assets/image/';
   static const String _assetsSvg = 'assets/svg/';
+  static const String _assetsGif = 'assets/image/';
 
   static const String introImage = _assetsJpeg + 'intro.jpeg';
   static const String googleImage = _assetsPng + 'google.png';
@@ -23,4 +24,7 @@ class ConstImages {
   //play pause
   static const String playImage = _assetsPng + 'play.png';
   static const String pauseImage = _assetsPng + 'pause.png';
+
+  static const String bubbleGif = _assetsGif + 'one.gif';
+  static const String textGif = _assetsGif + 'text.gif';
 }

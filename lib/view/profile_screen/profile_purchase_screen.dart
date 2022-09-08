@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:meditation_app/view/home/home_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../bottom_bar.dart';
 import '../../constant/colors.dart';
 import '../purchase_screens/Subscription_button.dart';
 
@@ -26,7 +26,7 @@ class _ProfilePurchaseScreenState extends State<ProfilePurchaseScreen> {
             height: MediaQuery.of(context).size.height,
             child: Image.asset(
               'assets/image/purchase.png',
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
             ),
           ),
           Padding(
@@ -65,7 +65,10 @@ class _ProfilePurchaseScreenState extends State<ProfilePurchaseScreen> {
               PageTransition(
                 type: PageTransitionType.fade,
                 //child: const BeginnerInfoScreen(),
-                child: BottomBarscreen(selectBottmTab: 0),
+
+                // with bottomNavigationBar(last change)
+                //child: BottomBarscreen(selectBottmTab: 0),
+                child: const HomeScreen(),
               ),
             );
           },

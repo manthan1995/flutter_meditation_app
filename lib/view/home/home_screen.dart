@@ -1,15 +1,16 @@
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meditation_app/constant/colors.dart';
 import 'package:meditation_app/constant/strings.dart';
-import 'package:meditation_app/widgtes/navigation.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:meditation_app/widgtes/buttons.dart';
 import '../../constant/image.dart';
 import '../../constant/preferences_key.dart';
+import '../../model/next_song_model.dart';
+import '../../model/user_model.dart';
+import '../../provider/next_song_provider.dart';
 import '../../widgtes/cicualer_indicator.dart';
-import '../profile_screen/profile_purchase_screen.dart';
-import 'music_play_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,6 +22,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late Map<String, dynamic> prefData;
   String? imageData = '';
+  NextSongProvider nextSongProvider = NextSongProvider();
+  late ApiResponseModel<NextSongModel> nextSongData;
+  //music
+  bool isplaying = false;
+  bool audioplayed = false;
+  late AudioCache audioCache;
+  AudioPlayer player = AudioPlayer();
+  String next = "";
+  String? nextImage;
 
   @override
   void initState() {
@@ -75,13 +85,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   headerText(),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.1,
-                    ),
-                    child: buildButton(),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Image.asset(ConstImages.bubbleGif,
+                            fit: BoxFit.cover,
+                            color: const Color.fromRGBO(255, 255, 255, 0.3),
+                            colorBlendMode: BlendMode.modulate),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Image.asset(
+                          ConstImages.textGif,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    ],
                   ),
                   bottomView(),
+                  buildButton(),
+                  finishButton()
                 ],
               ),
             ),
@@ -112,16 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            prefData['meditationData']['TITLE'],
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colours.whiteColor,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
             prefData['meditationData']['SUBTITLE'],
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -129,6 +145,16 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
               color: Colours.whiteColor,
               fontFamily: 'Recoleta-SemiBold',
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            prefData['meditationData']['TITLE'],
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colours.whiteColor,
             ),
           ),
         ],
@@ -145,44 +171,127 @@ class _HomeScreenState extends State<HomeScreen> {
           splashColor: Colors.black,
           splashFactory: NoSplash.splashFactory,
         ),
-        child: FadeInImage.assetNetwork(
-          fadeInDuration: const Duration(milliseconds: 600),
-          fadeOutDuration: const Duration(milliseconds: 1),
-          fit: BoxFit.fill,
-          image: prefData['meditationData']['URLS'] +
-              prefData['meditationData']['IMAGE'],
-          placeholder: 'assets/image/image1.png',
-        ),
+        child: nextImage != null
+            ? FadeInImage.assetNetwork(
+                fadeInDuration: const Duration(milliseconds: 600),
+                fadeOutDuration: const Duration(milliseconds: 1),
+                fit: BoxFit.fill,
+                image: nextImage!,
+                placeholder: 'assets/image/image1.png',
+              )
+            : FadeInImage.assetNetwork(
+                fadeInDuration: const Duration(milliseconds: 600),
+                fadeOutDuration: const Duration(milliseconds: 1),
+                fit: BoxFit.fill,
+                image: prefData['meditationData']['URLS'] +
+                    prefData['meditationData']['IMAGE'],
+                placeholder: 'assets/image/image1.png',
+              ),
       ),
     );
   }
 
   Widget buildButton() {
+    return CommanMaterialButton(
+      buttonWidth: 190,
+      buttonText: next == ""
+          ? isplaying
+              ? "Pause"
+              : "Play"
+          : next,
+      buttonColor: Colours.whiteColor,
+      onPressed: () async {
+        await HapticFeedback.mediumImpact();
+        // prefData['data']['ISSUBCRIBE'] == true
+        //     ? navigationPageTransition(
+        //         context: context,
+        //         screen: MusicHomeScreen(
+        //           backgroundUrl: prefData['meditationData']['URLS'] +
+        //               prefData['meditationData']['IMAGE'],
+        //           audioUrl: prefData['meditationData']['URLS'] +
+        //               prefData['meditationData']['MUSIC'],
+        //         ),
+        //       )
+        //     : Navigator.push(
+        //         context,
+        //         PageTransition(
+        //           duration: const Duration(milliseconds: 300),
+        //           type: PageTransitionType.fade,
+        //           child: const ProfilePurchaseScreen(),
+        //         ),
+        //       );
+        audioCache = AudioCache(fixedPlayer: player);
+
+        if (next == "Next") {
+          nextSongData = await nextSongProvider.nextSongProvider();
+          print(
+              "=================>${nextSongData.data!.data!.uRLS! + nextSongData.data!.data!.mUSIC!}");
+          player.play(
+            nextSongData.data!.data!.uRLS! + nextSongData.data!.data!.mUSIC!,
+          );
+          player.setReleaseMode(ReleaseMode.LOOP);
+          setState(() {
+            audioplayed = true;
+            isplaying = true;
+            nextImage = nextSongData.data!.data!.uRLS! +
+                nextSongData.data!.data!.iMAGE!;
+          });
+          next = "";
+        } else if (!audioplayed && !isplaying) {
+          player.play(
+            prefData['meditationData']['URLS'] +
+                prefData['meditationData']['MUSIC'],
+          );
+          print(
+              "===============>${prefData['meditationData']['URLS'] + prefData['meditationData']['MUSIC']}");
+          player.setReleaseMode(ReleaseMode.LOOP);
+          setState(() {
+            audioplayed = true;
+            isplaying = true;
+          });
+          player.notificationService.setNotification(
+            title: prefData['meditationData']['SUBTITLE'],
+            imageUrl: prefData['meditationData']['URLS'] +
+                prefData['meditationData']['IMAGE'],
+          );
+        } else {
+          if (audioplayed && !isplaying) {
+            await player.resume();
+            setState(() {
+              isplaying = true;
+              audioplayed = true;
+            });
+          } else {
+            await player.pause();
+            setState(() {
+              isplaying = false;
+            });
+          }
+        }
+      },
+    );
+  }
+
+  Widget finishButton() {
     return GestureDetector(
       onTap: () async {
         await HapticFeedback.mediumImpact();
-        prefData['data']['ISSUBCRIBE'] == true
-            ? navigationPageTransition(
-                context: context,
-                screen: MusicHomeScreen(
-                  backgroundUrl: prefData['meditationData']['URLS'] +
-                      prefData['meditationData']['IMAGE'],
-                  audioUrl: prefData['meditationData']['URLS'] +
-                      prefData['meditationData']['MUSIC'],
-                ),
-              )
-            : Navigator.push(
-                context,
-                PageTransition(
-                  duration: const Duration(milliseconds: 300),
-                  type: PageTransitionType.fade,
-                  child: const ProfilePurchaseScreen(),
-                ),
-              );
+
+        setState(() {
+          next = "Next";
+          player.stop();
+          isplaying = false;
+          audioplayed = false;
+        });
+        player.notificationService.clearNotification();
       },
-      child: Image.asset(
-        ConstImages.playImage,
-        height: MediaQuery.of(context).size.height * 0.085,
+      child: Text(
+        !audioplayed ? "" : Strings.finishButtonTExt,
+        style: const TextStyle(
+          fontSize: 20,
+          color: Colours.whiteColor,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

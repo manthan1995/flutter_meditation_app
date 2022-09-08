@@ -14,8 +14,7 @@ import 'package:meditation_app/widgtes/cicualer_indicator.dart';
 import 'package:meditation_app/widgtes/textfiled.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../../../bottom_bar.dart';
-import '../../profile_screen/profile_purchase_screen.dart';
+import '../../home/home_screen.dart';
 import '../login_screen.dart';
 
 class CreateAccountEmailScreen extends StatefulWidget {
@@ -215,10 +214,11 @@ class _CreateAccountEmailScreenState extends State<CreateAccountEmailScreen> {
                 PageTransition(
                   duration: const Duration(milliseconds: 400),
                   type: PageTransitionType.fade,
-                  // child: const HomeScreen(),
-                  child: prefData['data']['TYPE'] == 'COMPANY'
-                      ? BottomBarscreen(selectBottmTab: 0)
-                      : const ProfilePurchaseScreen(),
+                  // with bottomNavigationBar(last change)
+                  // child: prefData['data']['TYPE'] == 'COMPANY'
+                  //     ? BottomBarscreen(selectBottmTab: 0)
+                  //     : const ProfilePurchaseScreen(),
+                  child: const HomeScreen(),
                 ),
               );
             } else {

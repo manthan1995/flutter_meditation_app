@@ -7,6 +7,7 @@ import 'package:meditation_app/constant/image.dart';
 import 'package:meditation_app/constant/preferences_key.dart';
 import 'package:meditation_app/constant/strings.dart';
 import 'package:meditation_app/provider/auth_provider/login_provider.dart';
+import 'package:meditation_app/view/home/home_screen.dart';
 import 'package:meditation_app/view/profile_screen/profile_purchase_screen.dart';
 import 'package:meditation_app/welcome_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -49,17 +50,30 @@ class _SplashScreenState extends State<SplashScreen>
             isSocial: false,
           );
         }
+        // with bottomNavigationBar(last change)
+        // Navigator.push(
+        //   context,
+        //   PageTransition(
+        //     duration: const Duration(milliseconds: 1000),
+        //     type: PageTransitionType.fade,
+        //     child: prefData['data']['TYPE'] == 'COMPANY'
+        //         ? BottomBarscreen(
+        //             selectBottmTab: 0,
+        //           )
+        //         : prefData['data']['ISSUBCRIBE'] == true
+        //             ? BottomBarscreen(selectBottmTab: 0)
+        //             : const ProfilePurchaseScreen(),
+        //   ),
+        // );
         Navigator.push(
           context,
           PageTransition(
             duration: const Duration(milliseconds: 1000),
             type: PageTransitionType.fade,
             child: prefData['data']['TYPE'] == 'COMPANY'
-                ? BottomBarscreen(
-                    selectBottmTab: 0,
-                  )
+                ? const HomeScreen()
                 : prefData['data']['ISSUBCRIBE'] == true
-                    ? BottomBarscreen(selectBottmTab: 0)
+                    ? const HomeScreen()
                     : const ProfilePurchaseScreen(),
           ),
         );

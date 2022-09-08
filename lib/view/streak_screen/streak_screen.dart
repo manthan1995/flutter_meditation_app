@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meditation_app/constant/colors.dart';
 import 'package:meditation_app/constant/strings.dart';
+import 'package:meditation_app/view/home/home_screen.dart';
 import 'package:meditation_app/widgtes/buttons.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -149,7 +150,10 @@ class _StreakScreenState extends State<StreakScreen> {
           PageTransition(
             duration: const Duration(milliseconds: 300),
             type: PageTransitionType.fade,
-            child: BottomBarscreen(selectBottmTab: 2),
+            // with bottomNavigationBar(last change)
+
+            //child: BottomBarscreen(selectBottmTab: 2),
+            child: const HomeScreen(),
           ),
         );
       },
